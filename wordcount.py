@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright 2010 Google Inc.
@@ -41,21 +41,39 @@ print_words() and print_top().
 
 import sys
 
-# +++your code here+++
-# Define print_words(filename) and print_top(filename) functions.
-# You could write a helper utility function that reads a file
-# and builds and returns a word/count dict for it.
-# Then print_words() and print_top() can just call the utility function.
 
-###
+def helper_func(filename):
+    with open(filename, 'r') as f:
+        word = f.read()
+        word = word.replace('\n', ' ').lower().split(' ')
+        word_Dictionary = {}
+        for i in word:
+            if i != '' and i not in word_Dictionary:
+                word_Dictionary[i] = 1
+            elif i in word_Dictionary:
+                word_Dictionary[i] += 1
+    return word_Dictionary
 
-# This basic command line argument parsing code is provided and
-# calls the print_words() and print_top() functions which you must define.
+
+def print_words(filename):
+    word_Dictionary = helper_func(filename)
+    # learned about string formatting here https://www.learnpython.org/en/String_Formatting
+    for key in sorted(word_Dictionary.keys()):
+        print('%s: %s' % (key, word_Dictionary[key]))
+
+
+def print_top(filename):
+    # understanding to unpack to get it to sort by items https://stackoverflow.com/questions/15583081/sorting-dictionary-values-error-lambda
+    # took me forever to figure out how to get this to work with python 3 because of the change in the way items works in python 3
+    word_Dict = helper_func(filename)
+    for key, value in sorted(list(word_Dict.items()), key=lambda item: item[1], reverse=True)[:20]:
+        print("%s: %s" % (key, value))
 
 
 def main():
+
     if len(sys.argv) != 3:
-        print 'usage: python wordcount.py {--count | --topcount} file'
+        print('usage: python wordcount.py {--count | --topcount} file')
         sys.exit(1)
 
     option = sys.argv[1]
@@ -65,7 +83,7 @@ def main():
     elif option == '--topcount':
         print_top(filename)
     else:
-        print 'unknown option: ' + option
+        print('unknown option: ' + option)
         sys.exit(1)
 
 
