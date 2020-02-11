@@ -89,3 +89,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# this took about an hour and a half to complete
